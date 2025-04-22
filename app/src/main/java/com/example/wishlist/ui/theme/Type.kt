@@ -1,4 +1,4 @@
-package com.example.whishlist.ui.theme
+package com.example.wishlist.ui.theme
 
 import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle

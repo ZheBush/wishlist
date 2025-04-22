@@ -1,4 +1,4 @@
-package com.example.whishlist
+package com.example.wishlist
 
 import org.junit.Test
 
