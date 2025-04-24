@@ -1,6 +1,7 @@
 package com.example.wishlist
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
@@ -8,6 +9,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
@@ -21,6 +23,7 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Delete
+import androidx.compose.material.icons.filled.Edit
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.FabPosition
@@ -29,6 +32,10 @@ import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -53,12 +60,21 @@ class Home : ComponentActivity() {
 
 @Composable
 fun Activity() {
-    val list = mutableListOf(
-        Item(
-            1, "ABC", false
+    val list = remember {
+        mutableStateListOf(
+            Item(
+                1, "ABC", false
+            ),
+            Item(
+                2, "DEF", true
+            )
         )
-    )
-    var currentId = list.last().id + 1
+    }
+    val currentId = remember {
+        mutableIntStateOf(
+            list.last().id + 1
+        )
+    }
     Scaffold(
         modifier = Modifier
             .fillMaxWidth(),
@@ -66,9 +82,9 @@ fun Activity() {
             FloatingActionButton(
                 onClick = {
                     list.add(
-                        Item(currentId, "ABC", false)
+                        Item(currentId.intValue, "ABC", false)
                     )
-                    currentId++
+                    currentId.intValue++
                 },
                 shape = CircleShape,
                 modifier = Modifier
@@ -86,9 +102,11 @@ fun Activity() {
         },
         floatingActionButtonPosition = FabPosition.End,
         containerColor = LightGray
-    ) {
+    ) { padding ->
         LazyColumn(
-            modifier = Modifier.fillMaxSize(),
+            modifier = Modifier
+                .fillMaxSize()
+                .padding(padding),
             contentPadding = PaddingValues(15.dp)
         ) {
             itemsIndexed(list) { _, item ->
@@ -108,24 +126,49 @@ fun Activity() {
                         fontFamily = FontFamily.Monospace,
                         modifier = Modifier.padding(5.dp)
                     )
-                    Button(
-                        onClick = {
-                            list.remove(item)
-                        },
-                        modifier = Modifier
-                            .fillMaxHeight(),
-                        shape = RoundedCornerShape(6.dp),
-                        colors = ButtonDefaults.buttonColors(
-                            contentColor = White,
-                            containerColor = Blue
-                        )
+                    Row(
+                        horizontalArrangement = Arrangement.SpaceBetween
                     ) {
-                        Icon(
-                            Icons.Filled.Delete,
-                            contentDescription = "delete item"
-                        )
+                        Button(
+                            onClick = {
+
+                            },
+                            modifier = Modifier
+                                .padding(5.dp, 0.dp)
+                                .fillMaxHeight(),
+                            shape = RoundedCornerShape(6.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                contentColor = White,
+                                containerColor = Blue
+                            )
+                        ) {
+                            Icon(
+                                Icons.Filled.Edit,
+                                contentDescription = "edit item"
+                            )
+                        }
+                        Button(
+                            onClick = {
+                                list.remove(item)
+                            },
+                            modifier = Modifier
+                                .fillMaxHeight(),
+                            shape = RoundedCornerShape(6.dp),
+                            colors = ButtonDefaults.buttonColors(
+                                contentColor = White,
+                                containerColor = Blue
+                            )
+                        ) {
+                            Icon(
+                                Icons.Filled.Delete,
+                                contentDescription = "delete item"
+                            )
+                        }
                     }
                 }
+                Spacer(modifier = Modifier
+                    .fillMaxWidth()
+                    .height(8.dp))
             }
         }
     }
