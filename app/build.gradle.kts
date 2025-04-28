@@ -4,11 +4,11 @@ plugins {
 }
 
 android {
-    namespace = "com.example.whishlist"
+    namespace = "com.example.wishlist"
     compileSdk = 35
 
     defaultConfig {
-        applicationId = "com.example.whishlist"
+        applicationId = "com.example.wishlist"
         minSdk = 25
         targetSdk = 34
         versionCode = 1

@@ -9,3 +9,5 @@ val Gray25 = Color(25, 25, 25)
 val Black = Color(0, 0, 0)
 
 val Blue133 = Color(0, 7, 133, 255)
+
+val Transparent = Color(0, 0, 0, 0)

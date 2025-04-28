@@ -4,11 +4,27 @@ import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
+import androidx.compose.animation.ExperimentalAnimationApi
+import androidx.compose.animation.core.animateDpAsState
 import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInHorizontally
+import androidx.compose.animation.slideOutHorizontally
+import androidx.compose.animation.togetherWith
+import androidx.compose.animation.with
 import androidx.compose.foundation.Canvas
 import androidx.compose.foundation.background
 import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.BoxWithConstraints
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -33,25 +49,27 @@ import androidx.compose.material3.FabPosition
 import androidx.compose.material3.FloatingActionButton
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Scaffold
-import androidx.compose.material3.Switch
-import androidx.compose.material3.SwitchDefaults
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextField
 import androidx.compose.material3.TextFieldDefaults
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.mutableIntStateOf
 import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.snapshots.SnapshotStateList
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.geometry.CornerRadius
 import androidx.compose.ui.geometry.Offset
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.drawscope.Stroke
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.text.TextStyle
@@ -67,6 +85,7 @@ import com.example.wishlist.ui.theme.Blue133
 import com.example.wishlist.ui.theme.Gray180
 import com.example.wishlist.ui.theme.Gray235
 import com.example.wishlist.ui.theme.Gray25
+import com.example.wishlist.ui.theme.Transparent
 import com.example.wishlist.ui.theme.White
 
 class Home : ComponentActivity() {
@@ -84,11 +103,8 @@ fun Activity() {
     val list = remember {
         mutableStateListOf(
             Item(
-                1, "ABC", false
+                0, "ABC", "Description", false
             ),
-            Item(
-                2, "DEF", true
-            )
         )
     }
     val isAddCardWindowOpen = remember {
@@ -139,10 +155,10 @@ fun Activity() {
 fun OneCard(item: Item, list: SnapshotStateList<Item>) {
     Row(
         modifier = Modifier
-            .background(White, RoundedCornerShape(10.dp))
             .fillMaxWidth()
-            .height(55.dp)
-            .shadow(1.dp, RoundedCornerShape(10.dp))
+            .height(56.dp)
+            .shadow(5.dp, RoundedCornerShape(10.dp))
+            .background(White, RoundedCornerShape(10.dp))
             .padding(10.dp),
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween
@@ -201,11 +217,11 @@ fun OneCard(item: Item, list: SnapshotStateList<Item>) {
 
 @Composable
 fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) {
-    val id = when {
-        (list.isNotEmpty()) -> list.last().id
-        else -> 0
-    }
+    val id = if (list.isNotEmpty()) list.size else 0
     val title = remember {
+        mutableStateOf("")
+    }
+    val desc = remember {
         mutableStateOf("")
     }
     val isPrivate = remember {
@@ -223,9 +239,9 @@ fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) 
         ) {
             TextField(
                 value = "Title",
-                onValueChange = {newText -> title.value = newText},
+                onValueChange = { newText -> title.value = newText },
                 textStyle = TextStyle(
-                    fontSize = 16.sp,
+                    fontSize = 14.sp,
                     fontFamily = FontFamily.Monospace
                 ),
                 modifier = Modifier
@@ -243,20 +259,86 @@ fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) 
             val isSwitchEnabled = remember {
                 mutableStateOf(false)
             }
+            TextField(
+                value = "Description",
+                onValueChange = { newText -> desc.value = newText },
+                textStyle = TextStyle(
+                    fontSize = 14.sp,
+                    fontFamily = FontFamily.Monospace
+                ),
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .padding(10.dp, 0.dp, 10.dp, 10.dp),
+                shape = RoundedCornerShape(5.dp),
+                colors = TextFieldDefaults.colors(
+                    unfocusedContainerColor = Gray235,
+                    unfocusedTextColor = Gray180,
+                    focusedContainerColor = Gray235,
+                    focusedTextColor = Gray25,
+                    cursorColor = Blue133,
+                )
+            )
             Row(
                 modifier = Modifier.padding(22.dp, 16.dp)
-            ){
+            ) {
                 CustomSwitch(
-                    width = 24.dp,
-                    height = 14.dp,
+                    width = 22.dp,
+                    height = 13.dp,
                     strokeWith = 1.dp,
-                    gapBetweenThumbAndTrackEdge = 2.dp
+                    gapBetweenThumbAndTrackEdge = 2.dp,
+                    checkedTrackColor = Gray235,
+                    uncheckedTrackColor = Gray180,
+                    defaultText = "Private mode ",
+                    textOn = "on",
+                    textOff = "off",
+                    onCheckedChange = {
+                        isPrivate.value = !isPrivate.value
+                    }
                 )
+            }
+            Row(
+                modifier = Modifier
+                    .fillMaxSize()
+                    .padding(10.dp),
+                verticalAlignment = Alignment.Bottom,
+                horizontalArrangement = Arrangement.SpaceEvenly
+            ) {
+                Button(
+                    onClick = {
+                        list.add(
+                            Item(
+                                id,
+                                title.value,
+                                desc.value,
+                                isPrivate.value
+                            )
+                        )
+                        isOpen.value = false
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Blue133,
+                        contentColor = Gray235
+                    )
+                ) {
+                    Text("Create", fontFamily = FontFamily.Monospace)
+                }
+                Button(
+                    onClick = {
+                        isOpen.value = false
+                    },
+                    colors = ButtonDefaults.buttonColors(
+                        containerColor = Blue133,
+                        contentColor = Gray235
+                    )
+                ) {
+                    Text("Cancel", fontFamily = FontFamily.Monospace)
+                }
             }
         }
     }
 }
 
+@OptIn(ExperimentalAnimationApi::class)
 @Composable
 fun CustomSwitch(
     scale: Float = 2f,
@@ -271,8 +353,15 @@ fun CustomSwitch(
     checkedTrackColor: Color = Blue133,
     checkedBorderColor: Color = Blue133,
     gapBetweenThumbAndTrackEdge: Dp = 4.dp,
-    switchOn: MutableState<Boolean> = mutableStateOf(false)
+    defaultText: String = "",
+    textOn: String = "",
+    textOff: String = "",
+    switchOn: MutableState<Boolean> = remember {
+        mutableStateOf(false)
+    },
+    onCheckedChange: (Boolean) -> Unit
 ) {
+    val animationSpec = 250
     val animatePosition = animateFloatAsState(
         targetValue = if (switchOn.value)
             with(LocalDensity.current) {
@@ -282,36 +371,86 @@ fun CustomSwitch(
             with(LocalDensity.current) {
                 (thumbRadius + gapBetweenThumbAndTrackEdge).toPx()
             },
+        animationSpec = tween(animationSpec),
+        label = ""
+    )
+    val animatedSwitchText = animateFloatAsState(
+        targetValue = if (switchOn.value) 1f else 0f,
+        animationSpec = tween(animationSpec),
         label = ""
     )
     val background = remember {
-        mutableStateOf(Gray235)
+        derivedStateOf {
+            if (switchOn.value) Blue133 else Gray235
+        }
     }
-    Canvas(
-        modifier = Modifier
-            .size(width = width, height = height)
-            .scale(scale)
-            .pointerInput(Unit) {
-                detectTapGestures {
-                    switchOn.value = !switchOn.value
-                    background.value = if (background.value == Gray235) Blue133 else Gray235
-                }
-            }
-            .background(background.value, shape = RoundedCornerShape(10.dp))
+    val switchTextState = remember {
+        mutableStateOf(textOff)
+    }
+    Row (
+        verticalAlignment = Alignment.CenterVertically
     ) {
-        drawRoundRect(
-            color = if (switchOn.value) checkedBorderColor else uncheckedBorderColor,
-            cornerRadius = CornerRadius(x = 10.dp.toPx(), y = 10.dp.toPx()),
-            style = Stroke(width = strokeWith.toPx())
-        )
-        drawCircle(
-            color = if (switchOn.value) checkedThumbColor else uncheckedThumbColor,
-            radius = thumbRadius.toPx(),
-            center = Offset(
-                x = animatePosition.value,
-                y = size.height / 2
-            ),
-        )
+        Canvas(
+            modifier = Modifier
+                .size(width = width, height = height)
+                .scale(scale)
+                .pointerInput(Unit) {
+                    detectTapGestures {
+                        switchOn.value = !switchOn.value
+                        switchTextState.value =
+                            if ((switchTextState.value) == textOff) textOn else textOff
+                    }
+                }
+                .background(background.value, shape = RoundedCornerShape(10.dp))
+        ) {
+            drawRoundRect(
+                color = if (switchOn.value) checkedTrackColor else uncheckedTrackColor,
+                cornerRadius = CornerRadius(x = 10.dp.toPx(), y = 10.dp.toPx()),
+                style = Stroke(width = strokeWith.toPx())
+            )
+            drawCircle(
+                color = if (switchOn.value) checkedThumbColor else uncheckedThumbColor,
+                radius = thumbRadius.toPx(),
+                center = Offset(
+                    x = animatePosition.value,
+                    y = size.height / 2
+                ),
+            )
+        }
+        Spacer(modifier = Modifier.size(20.dp))
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.CenterVertically
+        ) {
+            Text(
+                text = defaultText,
+                fontFamily = FontFamily.Monospace
+            )
+            Box(
+                modifier = Modifier
+                    .clipToBounds()
+            ) {
+                Text(
+                    text = textOff,
+                    modifier = Modifier
+                        .graphicsLayer {
+                            translationX = 30.dp.toPx() * animatedSwitchText.value
+                        },
+                    color = Gray25,
+                    fontFamily = FontFamily.Monospace
+                )
+                Text(
+                    text = textOn,
+                    modifier = Modifier
+                        .graphicsLayer {
+                            translationX = -30.dp.toPx() * (1f - animatedSwitchText.value)
+                        },
+                    color = Gray25,
+                    fontFamily = FontFamily.Monospace
+                )
+
+            }
+        }
     }
 }
 
