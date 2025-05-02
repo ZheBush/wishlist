@@ -38,10 +38,10 @@ import com.example.wishlist.ui.theme.Gray25
 fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) {
     val id = if (list.isNotEmpty()) list.size else 0
     val title = remember {
-        mutableStateOf("")
+        mutableStateOf("Title")
     }
     val desc = remember {
-        mutableStateOf("")
+        mutableStateOf("Description")
     }
     val isPrivate = remember {
         mutableStateOf(false)
@@ -57,7 +57,7 @@ fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) 
                 .size(300.dp, 500.dp)
         ) {
             TextField(
-                value = "Title",
+                value = title.value,
                 onValueChange = { newText -> title.value = newText },
                 textStyle = TextStyle(
                     fontSize = 14.sp,
@@ -76,7 +76,7 @@ fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) 
                 )
             )
             TextField(
-                value = "Description",
+                value = desc.value,
                 onValueChange = { newText -> desc.value = newText },
                 textStyle = TextStyle(
                     fontSize = 14.sp,
@@ -130,7 +130,7 @@ fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) 
                         contentColor = Gray235
                     )
                 ) {
-                    Text("Create", fontFamily = FontFamily.Monospace)
+                    Text("Create",  fontFamily = FontFamily.Monospace)
                 }
                 Button(
                     onClick = {

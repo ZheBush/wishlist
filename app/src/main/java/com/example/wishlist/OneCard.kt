@@ -98,9 +98,6 @@ fun OneCard(item: Item, list: SnapshotStateList<Item>) {
             }
         }
     }
-    Spacer(modifier = Modifier
-        .fillMaxWidth()
-        .height(8.dp))
 }
 
 @Preview(showBackground = false)
