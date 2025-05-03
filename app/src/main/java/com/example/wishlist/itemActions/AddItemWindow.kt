@@ -1,4 +1,4 @@
-package com.example.wishlist.item
+package com.example.wishlist.itemActions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,13 +35,13 @@ import com.example.wishlist.ui.theme.Gray235
 import com.example.wishlist.ui.theme.Gray25
 
 @Composable
-fun ChangeItemWindow(isOpen: MutableState<Boolean>, item: Item, list: SnapshotStateList<Item>) {
+fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) {
     val id = if (list.isNotEmpty()) list.size else 0
     val title = remember {
-        mutableStateOf(item.title)
+        mutableStateOf("Title")
     }
     val desc = remember {
-        mutableStateOf(item.desc)
+        mutableStateOf("Description")
     }
     Dialog(
         onDismissRequest = {
@@ -100,8 +100,13 @@ fun ChangeItemWindow(isOpen: MutableState<Boolean>, item: Item, list: SnapshotSt
             ) {
                 Button(
                     onClick = {
-                        item.title = title.value
-                        item.desc = desc.value
+                        list.add(
+                            Item(
+                                id,
+                                title.value,
+                                desc.value
+                            )
+                        )
                         isOpen.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -109,7 +114,7 @@ fun ChangeItemWindow(isOpen: MutableState<Boolean>, item: Item, list: SnapshotSt
                         contentColor = Gray235
                     )
                 ) {
-                    Text("Apply",  fontFamily = FontFamily.Monospace)
+                    Text("Create",  fontFamily = FontFamily.Monospace)
                 }
                 Button(
                     onClick = {
@@ -128,16 +133,11 @@ fun ChangeItemWindow(isOpen: MutableState<Boolean>, item: Item, list: SnapshotSt
 }
 @Preview(showBackground = false)
 @Composable
-fun ChangeItemWindowPreview() {
-    ChangeItemWindow(
+fun AddItemWindowPreview() {
+    AddItemWindow(
         remember {
             mutableStateOf(true)
         },
-        Item(
-            0,
-            "ABC",
-            "DESC"
-        ),
         remember {
             mutableStateListOf()
         }

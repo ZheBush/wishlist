@@ -1,4 +1,4 @@
-package com.example.wishlist.item
+package com.example.wishlist.itemActions
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement

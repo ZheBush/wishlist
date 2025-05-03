@@ -30,8 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wishlist.data.Item
-import com.example.wishlist.item.ChangeItemWindow
-import com.example.wishlist.item.DeleteItemWindow
+import com.example.wishlist.itemActions.ChangeItemWindow
+import com.example.wishlist.itemActions.DeleteItemWindow
 import com.example.wishlist.ui.theme.Blue133
 import com.example.wishlist.ui.theme.White
 
@@ -115,7 +115,7 @@ fun OneWish(item: Item, list: SnapshotStateList<Item>) {
 
 @Preview(showBackground = false)
 @Composable
-fun OneCardPreview() {
+fun OneWishPreview() {
     OneWish(
         item = Item(
             0,
