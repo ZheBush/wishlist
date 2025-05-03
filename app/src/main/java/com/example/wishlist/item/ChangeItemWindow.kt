@@ -1,4 +1,4 @@
-package com.example.wishlist
+package com.example.wishlist.item
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -35,16 +35,13 @@ import com.example.wishlist.ui.theme.Gray235
 import com.example.wishlist.ui.theme.Gray25
 
 @Composable
-fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) {
+fun ChangeItemWindow(isOpen: MutableState<Boolean>, item: Item, list: SnapshotStateList<Item>) {
     val id = if (list.isNotEmpty()) list.size else 0
     val title = remember {
-        mutableStateOf("Title")
+        mutableStateOf(item.title)
     }
     val desc = remember {
-        mutableStateOf("Description")
-    }
-    val isPrivate = remember {
-        mutableStateOf(false)
+        mutableStateOf(item.desc)
     }
     Dialog(
         onDismissRequest = {
@@ -54,7 +51,7 @@ fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) 
         Column(
             modifier = Modifier
                 .background(Gray235, RoundedCornerShape(5.dp))
-                .size(300.dp, 500.dp)
+                .size(300.dp, 400.dp)
         ) {
             TextField(
                 value = title.value,
@@ -95,18 +92,6 @@ fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) 
                 )
             )
             Row(
-                modifier = Modifier.padding(22.dp, 16.dp)
-            ) {
-                CustomSwitch(
-                    defaultText = "Private mode ",
-                    textOn = "on",
-                    textOff = "off",
-                    onCheckedChange = {
-                        isPrivate.value = !isPrivate.value
-                    }
-                )
-            }
-            Row(
                 modifier = Modifier
                     .fillMaxSize()
                     .padding(10.dp),
@@ -115,14 +100,8 @@ fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) 
             ) {
                 Button(
                     onClick = {
-                        list.add(
-                            Item(
-                                id,
-                                title.value,
-                                desc.value,
-                                isPrivate.value
-                            )
-                        )
+                        item.title = title.value
+                        item.desc = desc.value
                         isOpen.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
@@ -130,7 +109,7 @@ fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) 
                         contentColor = Gray235
                     )
                 ) {
-                    Text("Create",  fontFamily = FontFamily.Monospace)
+                    Text("Apply",  fontFamily = FontFamily.Monospace)
                 }
                 Button(
                     onClick = {
@@ -149,11 +128,16 @@ fun AddItemWindow(isOpen: MutableState<Boolean>, list: SnapshotStateList<Item>) 
 }
 @Preview(showBackground = false)
 @Composable
-fun AddItemWindowPreview() {
-    AddItemWindow(
+fun ChangeItemWindowPreview() {
+    ChangeItemWindow(
         remember {
             mutableStateOf(true)
         },
+        Item(
+            0,
+            "ABC",
+            "DESC"
+        ),
         remember {
             mutableStateListOf()
         }

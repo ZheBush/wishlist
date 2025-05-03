@@ -30,11 +30,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wishlist.data.Item
+import com.example.wishlist.item.ChangeItemWindow
+import com.example.wishlist.item.DeleteItemWindow
 import com.example.wishlist.ui.theme.Blue133
 import com.example.wishlist.ui.theme.White
 
 @Composable
-fun OneCard(item: Item, list: SnapshotStateList<Item>) {
+fun OneWish(item: Item, list: SnapshotStateList<Item>) {
     Row(
         modifier = Modifier
             .fillMaxWidth()
@@ -48,19 +50,24 @@ fun OneCard(item: Item, list: SnapshotStateList<Item>) {
         val isDeleteItemWindowOpen = remember {
             mutableStateOf(false)
         }
+        val isChangeItemWindowOpen = remember {
+            mutableStateOf(false)
+        }
         Text(
             item.title,
             fontSize = 16.sp,
             fontFamily = FontFamily.Monospace,
-            modifier = Modifier.padding(5.dp),
-            overflow = TextOverflow.Ellipsis
+            overflow = TextOverflow.Ellipsis,
+            modifier = Modifier
+                .padding(5.dp)
+                .weight(1f)
         )
         Row(
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
             Button(
                 onClick = {
-
+                    isChangeItemWindowOpen.value = true
                 },
                 modifier = Modifier
                     .padding(5.dp, 0.dp)
@@ -96,6 +103,9 @@ fun OneCard(item: Item, list: SnapshotStateList<Item>) {
             if (isDeleteItemWindowOpen.value) {
                 DeleteItemWindow(isDeleteItemWindowOpen, item, list)
             }
+            if (isChangeItemWindowOpen.value) {
+                ChangeItemWindow(isChangeItemWindowOpen, item, list)
+            }
         }
     }
     Spacer(modifier = Modifier
@@ -106,12 +116,11 @@ fun OneCard(item: Item, list: SnapshotStateList<Item>) {
 @Preview(showBackground = false)
 @Composable
 fun OneCardPreview() {
-    OneCard(
+    OneWish(
         item = Item(
             0,
             "ABC",
-            "DESC",
-            false
+            "DESC"
         ),
         list = remember {
             mutableStateListOf()

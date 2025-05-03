@@ -19,6 +19,6 @@ dependencyResolutionManagement {
     }
 }
 
-rootProject.name = "whishlist"
+rootProject.name = "wishlist"
 include(":app")
  

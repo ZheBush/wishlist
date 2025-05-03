@@ -1,26 +1,21 @@
 package com.example.wishlist
 
-import android.adservices.topics.Topic
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
-import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
-import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
 import androidx.compose.material.icons.filled.Menu
@@ -38,7 +33,6 @@ import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.material3.TextButton
 import androidx.compose.material3.TopAppBar
-import androidx.compose.material3.TopAppBarColors
 import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
@@ -47,14 +41,11 @@ import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.input.pointer.PointerIcon.Companion.Text
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontFamily
-import androidx.compose.ui.text.font.FontStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
@@ -62,8 +53,8 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wishlist.data.Item
+import com.example.wishlist.item.AddItemWindow
 import com.example.wishlist.ui.theme.Blue133
-import com.example.wishlist.ui.theme.Gray180
 import com.example.wishlist.ui.theme.Gray235
 import com.example.wishlist.ui.theme.Gray25
 import com.example.wishlist.ui.theme.White
@@ -85,7 +76,7 @@ fun Activity() {
     val list = remember {
         mutableStateListOf(
             Item(
-                0, "ABC", "Description", false
+                0, "ABC", "Description"
             ),
         )
     }
@@ -130,7 +121,12 @@ fun Activity() {
                     IconButton(
                         onClick = {
                             scope.launch {
-                                drawerState.open()
+                                if (drawerState.isOpen) {
+                                    drawerState.close()
+                                }
+                                else {
+                                    drawerState.open()
+                                }
                             }
                         }
                     ) {
@@ -227,7 +223,7 @@ fun Activity() {
                     )
                 ) {
                     itemsIndexed(list) { _, item ->
-                        OneCard(item = item, list = list)
+                        OneWish(item = item, list = list)
                     }
                 }
                 if (isAddCardWindowOpen.value) {
