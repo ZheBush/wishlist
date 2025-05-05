@@ -54,25 +54,25 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.wishlist.data.Item
 import com.example.wishlist.itemActions.AddItemWindow
-import com.example.wishlist.ui.theme.Blue133
+import com.example.wishlist.ui.theme.Blue104
 import com.example.wishlist.ui.theme.Gray235
 import com.example.wishlist.ui.theme.Gray25
 import com.example.wishlist.ui.theme.White
 import kotlinx.coroutines.launch
 
-class WishListActivity : ComponentActivity() {
+class MyWishListActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            WishList()
+            MyWishList()
         }
     }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun WishList() {
+fun MyWishList() {
     val list = remember {
         mutableStateListOf(
             Item(
@@ -138,7 +138,7 @@ fun WishList() {
                 },
                 colors = TopAppBarDefaults.topAppBarColors(
                     containerColor = Gray235,
-                    titleContentColor = Blue133,
+                    titleContentColor = Blue104,
                     navigationIconContentColor = Gray25
                 )
             )
@@ -153,7 +153,7 @@ fun WishList() {
                     .padding(20.dp)
                     .shadow(5.dp, CircleShape),
                 containerColor = White,
-                contentColor = Blue133
+                contentColor = Blue104
             ) {
                 Icon(
                     Icons.Filled.Add,
@@ -170,7 +170,7 @@ fun WishList() {
             drawerContent = {
                 ModalDrawerSheet(
                     drawerContainerColor = Gray235,
-                    drawerContentColor = Blue133,
+                    drawerContentColor = Blue104,
                     modifier = Modifier
                         .requiredWidth(300.dp)
                 ) {
@@ -191,7 +191,7 @@ fun WishList() {
                                 }
                             },
                             colors = NavigationDrawerItemDefaults.colors(
-                                selectedContainerColor = Blue133,
+                                selectedContainerColor = Blue104,
                                 unselectedContainerColor = Gray235,
                                 selectedTextColor = Gray235,
                                 unselectedTextColor = Gray25
@@ -237,5 +237,5 @@ fun WishList() {
 @Preview(showBackground = true)
 @Composable
 fun WishListPreview() {
-    WishList()
+    MyWishList()
 }

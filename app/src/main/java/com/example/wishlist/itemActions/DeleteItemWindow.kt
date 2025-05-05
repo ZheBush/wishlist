@@ -24,7 +24,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.wishlist.data.Item
-import com.example.wishlist.ui.theme.Blue133
+import com.example.wishlist.ui.theme.Blue104
 import com.example.wishlist.ui.theme.Gray235
 
 
@@ -57,7 +57,7 @@ fun DeleteItemWindow(isOpen: MutableState<Boolean>, item: Item, list: SnapshotSt
                         isOpen.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Blue133,
+                        containerColor = Blue104,
                         contentColor = Gray235
                     )
                 ) {
@@ -68,7 +68,7 @@ fun DeleteItemWindow(isOpen: MutableState<Boolean>, item: Item, list: SnapshotSt
                         isOpen.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Blue133,
+                        containerColor = Blue104,
                         contentColor = Gray235
                     )
                 ) {

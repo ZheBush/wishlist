@@ -29,7 +29,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.window.Dialog
 import com.example.wishlist.data.Item
-import com.example.wishlist.ui.theme.Blue133
+import com.example.wishlist.ui.theme.Blue104
 import com.example.wishlist.ui.theme.Gray180
 import com.example.wishlist.ui.theme.Gray235
 import com.example.wishlist.ui.theme.Gray25
@@ -69,7 +69,7 @@ fun ChangeItemWindow(isOpen: MutableState<Boolean>, item: Item, list: SnapshotSt
                     unfocusedTextColor = Gray180,
                     focusedContainerColor = Gray235,
                     focusedTextColor = Gray25,
-                    cursorColor = Blue133,
+                    cursorColor = Blue104,
                 )
             )
             TextField(
@@ -88,7 +88,7 @@ fun ChangeItemWindow(isOpen: MutableState<Boolean>, item: Item, list: SnapshotSt
                     unfocusedTextColor = Gray180,
                     focusedContainerColor = Gray235,
                     focusedTextColor = Gray25,
-                    cursorColor = Blue133,
+                    cursorColor = Blue104,
                 )
             )
             Row(
@@ -105,7 +105,7 @@ fun ChangeItemWindow(isOpen: MutableState<Boolean>, item: Item, list: SnapshotSt
                         isOpen.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Blue133,
+                        containerColor = Blue104,
                         contentColor = Gray235
                     )
                 ) {
@@ -116,7 +116,7 @@ fun ChangeItemWindow(isOpen: MutableState<Boolean>, item: Item, list: SnapshotSt
                         isOpen.value = false
                     },
                     colors = ButtonDefaults.buttonColors(
-                        containerColor = Blue133,
+                        containerColor = Blue104,
                         contentColor = Gray235
                     )
                 ) {

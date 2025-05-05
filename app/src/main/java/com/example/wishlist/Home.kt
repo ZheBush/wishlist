@@ -21,10 +21,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.scale
 import androidx.compose.ui.graphics.ImageBitmap
-import androidx.compose.ui.graphics.RectangleShape
 import androidx.compose.ui.graphics.painter.BitmapPainter
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.imageResource
@@ -34,9 +31,12 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.example.wishlist.ui.theme.Blue133
+import androidx.navigation.NavController
+import androidx.navigation.compose.NavHost
+import androidx.navigation.compose.composable
+import androidx.navigation.compose.rememberNavController
+import com.example.wishlist.ui.theme.Blue104
 import com.example.wishlist.ui.theme.Gray235
-import com.example.wishlist.ui.theme.Gray25
 import com.example.wishlist.ui.theme.White
 
 data class HomeCard(
@@ -49,13 +49,25 @@ class HomeActivity : ComponentActivity() {
         super.onCreate(savedInstanceState)
         enableEdgeToEdge()
         setContent {
-            Home()
+            Main()
         }
     }
 }
 
 @Composable
-fun Home() {
+fun Main() {
+    val navController = rememberNavController()
+    NavHost(
+        navController = navController,
+        startDestination = NavRoutes.Home.route
+    ) {
+        composable(NavRoutes.Home.route) { Home(navController) }
+        composable(NavRoutes.MyWishList.route) { MyWishList() }
+    }
+}
+
+@Composable
+fun Home(navController: NavController) {
     Column(
         modifier = Modifier
             .fillMaxSize()
@@ -69,7 +81,7 @@ fun Home() {
             fontFamily = FontFamily.Monospace,
             fontWeight = FontWeight.W900,
             textAlign = TextAlign.Center,
-            color = Blue133,
+            color = Blue104,
             modifier = Modifier.padding(bottom = 20.dp)
         )
         Box(
@@ -78,7 +90,7 @@ fun Home() {
             val cards = listOf(
                 HomeCard(
                     "MY LIST",
-                    ImageBitmap.imageResource(id = R.drawable.menu)
+                    ImageBitmap.imageResource(id = R.drawable.list)
                 ),
                 HomeCard(
                     "RESERVED",
@@ -92,7 +104,7 @@ fun Home() {
                     "SETTINGS",
                     ImageBitmap.imageResource(id = R.drawable.setting)
                 ),
-            )
+                )
             LazyHorizontalGrid(
                 rows = GridCells.Fixed(2),
                 modifier = Modifier
@@ -112,6 +124,22 @@ fun Home() {
                         elevation = CardDefaults.cardElevation(
                             defaultElevation = 2.dp
                         ),
+                        onClick = {
+                            when(card.title) {
+                                "MY LIST" -> navController.navigate(
+                                    NavRoutes.MyWishList.route
+                                )
+                                "MY GROUPS" -> navController.navigate(
+                                    NavRoutes.MyGroups.route
+                                )
+                                "RESERVED" -> navController.navigate(
+                                    NavRoutes.Reserved.route
+                                )
+                                "SETTINGS" -> navController.navigate(
+                                    NavRoutes.Settings.route
+                                )
+                            }
+                        }
                     ) {
                         Column(
                             modifier = Modifier.fillMaxSize(),
@@ -143,5 +171,5 @@ fun Home() {
 @Preview(showBackground = true)
 @Composable
 fun HomePreview() {
-    Home()
+    Main()
 }

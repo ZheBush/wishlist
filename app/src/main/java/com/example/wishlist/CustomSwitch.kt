@@ -15,7 +15,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
@@ -33,7 +32,7 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
-import com.example.wishlist.ui.theme.Blue133
+import com.example.wishlist.ui.theme.Blue104
 import com.example.wishlist.ui.theme.Gray180
 import com.example.wishlist.ui.theme.Gray235
 import com.example.wishlist.ui.theme.Gray25
@@ -45,12 +44,12 @@ fun CustomSwitch(
     height: Dp = 12.dp,
     thumbRadius: Dp = height / 3,
     strokeWith: Dp = 1.dp,
-    uncheckedThumbColor: Color = Blue133,
+    uncheckedThumbColor: Color = Blue104,
     uncheckedTrackColor: Color = Gray180,
     uncheckedBorderColor: Color = Gray25,
     checkedThumbColor: Color = Gray235,
     checkedTrackColor: Color = Gray235,
-    checkedBorderColor: Color = Blue133,
+    checkedBorderColor: Color = Blue104,
     gapBetweenThumbAndTrackEdge: Dp = 2.dp,
     defaultText: String = "",
     textOn: String = "",
@@ -80,7 +79,7 @@ fun CustomSwitch(
     )
     val background = remember {
         derivedStateOf {
-            if (switchOn.value) Blue133 else Gray235
+            if (switchOn.value) Blue104 else Gray235
         }
     }
     val switchTextState = remember {

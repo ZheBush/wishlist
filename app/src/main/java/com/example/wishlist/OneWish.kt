@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.sp
 import com.example.wishlist.data.Item
 import com.example.wishlist.itemActions.ChangeItemWindow
 import com.example.wishlist.itemActions.DeleteItemWindow
-import com.example.wishlist.ui.theme.Blue133
+import com.example.wishlist.ui.theme.Blue104
 import com.example.wishlist.ui.theme.White
 
 @Composable
@@ -75,7 +75,7 @@ fun OneWish(item: Item, list: SnapshotStateList<Item>) {
                 shape = RoundedCornerShape(6.dp),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = White,
-                    containerColor = Blue133
+                    containerColor = Blue104
                 )
             ) {
                 Icon(
@@ -92,7 +92,7 @@ fun OneWish(item: Item, list: SnapshotStateList<Item>) {
                 shape = RoundedCornerShape(6.dp),
                 colors = ButtonDefaults.buttonColors(
                     contentColor = White,
-                    containerColor = Blue133
+                    containerColor = Blue104
                 )
             ) {
                 Icon(
