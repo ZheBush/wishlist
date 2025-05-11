@@ -39,11 +39,6 @@ import com.example.wishlist.ui.theme.Blue104
 import com.example.wishlist.ui.theme.Gray235
 import com.example.wishlist.ui.theme.White
 
-data class HomeCard(
-    val title: String,
-    val image: ImageBitmap
-)
-
 class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -62,7 +57,8 @@ fun Main() {
         startDestination = NavRoutes.Home.route
     ) {
         composable(NavRoutes.Home.route) { Home(navController) }
-        composable(NavRoutes.MyWishList.route) { MyWishList() }
+        composable(NavRoutes.MyWishList.route) { MyWishLists(navController) }
+        composable(NavRoutes.MyGroups.route) { MyGroups(navController) }
     }
 }
 
@@ -89,7 +85,7 @@ fun Home(navController: NavController) {
         ) {
             val cards = listOf(
                 HomeCard(
-                    "MY LIST",
+                    "MY LISTS",
                     ImageBitmap.imageResource(id = R.drawable.list)
                 ),
                 HomeCard(

@@ -5,5 +5,5 @@ data class User(
     val userName: String,
     val email: String,
     val password: String,
-    val listId: Int
+    val lists: List<Wishlist>
 )

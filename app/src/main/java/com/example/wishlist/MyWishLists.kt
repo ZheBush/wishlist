@@ -1,9 +1,5 @@
 package com.example.wishlist
 
-import android.os.Bundle
-import androidx.activity.ComponentActivity
-import androidx.activity.compose.setContent
-import androidx.activity.enableEdgeToEdge
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
@@ -48,10 +44,10 @@ import androidx.compose.ui.platform.LocalConfiguration
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.navigation.NavController
 import com.example.wishlist.data.Item
 import com.example.wishlist.itemActions.AddItemWindow
 import com.example.wishlist.ui.theme.Blue104
@@ -60,24 +56,14 @@ import com.example.wishlist.ui.theme.Gray25
 import com.example.wishlist.ui.theme.White
 import kotlinx.coroutines.launch
 
-class MyWishListActivity : ComponentActivity() {
-    override fun onCreate(savedInstanceState: Bundle?) {
-        super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
-        setContent {
-            MyWishList()
-        }
-    }
-}
-
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-fun MyWishList() {
+fun MyWishLists(navController: NavController) {
     val list = remember {
         mutableStateListOf(
             Item(
                 0, "ABC", "Description"
-            ),
+            )
         )
     }
     val isAddCardWindowOpen = remember {
@@ -90,7 +76,7 @@ fun MyWishList() {
     val drawerState = rememberDrawerState(DrawerValue.Closed)
     val scope = rememberCoroutineScope()
     val selectedItem = remember {
-        mutableIntStateOf(0)
+        mutableStateOf("MY LIST")
     }
     Scaffold(
         modifier = Modifier
@@ -99,8 +85,8 @@ fun MyWishList() {
             TopAppBar(
                 title = {
                     Text(
-                        "eWist",
-                        fontSize = 22.sp,
+                        "MY LISTS",
+                        fontSize = 18.sp,
                         fontFamily = FontFamily.Monospace,
                         fontWeight = FontWeight.W900,
                         textAlign = TextAlign.Center,
@@ -174,20 +160,25 @@ fun MyWishList() {
                     modifier = Modifier
                         .requiredWidth(300.dp)
                 ) {
-                    listOf(0, 1, 2, 3).forEach { item ->
+                    listOf(
+                        "MY LIST",
+                        "MY GROUPS",
+                        "RESERVED",
+                        "SETTINGS"
+                    ).forEach { item ->
                         NavigationDrawerItem(
                             label = {
                                 Text(
-                                    text = item.toString(),
+                                    text = item,
                                     fontSize = 14.sp,
                                     fontFamily = FontFamily.Monospace,
                                 )
                             },
-                            selected = selectedItem.intValue == item,
+                            selected = selectedItem.value == item,
                             onClick = {
                                 scope.launch {
                                     drawerState.close()
-                                    selectedItem.intValue =item
+                                    selectedItem.value = item
                                 }
                             },
                             colors = NavigationDrawerItemDefaults.colors(
@@ -232,10 +223,4 @@ fun MyWishList() {
             }
         }
     }
-}
-
-@Preview(showBackground = true)
-@Composable
-fun WishListPreview() {
-    MyWishList()
 }
