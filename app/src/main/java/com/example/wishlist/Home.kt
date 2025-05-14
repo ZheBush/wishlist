@@ -57,7 +57,7 @@ fun Main() {
         startDestination = NavRoutes.Home.route
     ) {
         composable(NavRoutes.Home.route) { Home(navController) }
-        composable(NavRoutes.MyWishList.route) { MyWishLists(navController) }
+        composable(NavRoutes.MyWishLists.route) { MyWishLists(navController) }
         composable(NavRoutes.MyGroups.route) { MyGroups(navController) }
     }
 }
@@ -122,8 +122,8 @@ fun Home(navController: NavController) {
                         ),
                         onClick = {
                             when(card.title) {
-                                "MY LIST" -> navController.navigate(
-                                    NavRoutes.MyWishList.route
+                                "MY LISTS" -> navController.navigate(
+                                    NavRoutes.MyWishLists.route
                                 )
                                 "MY GROUPS" -> navController.navigate(
                                     NavRoutes.MyGroups.route

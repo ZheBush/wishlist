@@ -10,6 +10,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.requiredWidth
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.Add
@@ -32,6 +33,7 @@ import androidx.compose.material3.TopAppBarDefaults
 import androidx.compose.material3.rememberDrawerState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
@@ -47,6 +49,7 @@ import androidx.compose.ui.unit.IntOffset
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
+import com.example.wishlist.data.Item
 import com.example.wishlist.ui.theme.Blue104
 import com.example.wishlist.ui.theme.Gray235
 import com.example.wishlist.ui.theme.Gray25
@@ -156,7 +159,7 @@ fun MyGroups(navController: NavController) {
                         NavigationDrawerItem(
                             label = {
                                 Text(
-                                    text = item.toString(),
+                                    text = item,
                                     fontSize = 14.sp,
                                     fontFamily = FontFamily.Monospace,
                                 )
@@ -165,7 +168,7 @@ fun MyGroups(navController: NavController) {
                             onClick = {
                                 scope.launch {
                                     drawerState.close()
-                                    selectedItem.value =item
+                                    selectedItem.value = item
                                 }
                             },
                             colors = NavigationDrawerItemDefaults.colors(
@@ -199,9 +202,7 @@ fun MyGroups(navController: NavController) {
                         start = 15.dp,
                         end = 15.dp
                     )
-                ) {
-
-                }
+                ) {}
             }
         }
     }
