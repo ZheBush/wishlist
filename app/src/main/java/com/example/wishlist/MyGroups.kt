@@ -68,127 +68,127 @@ fun MyGroups(navController: NavController) {
     val selectedItem = remember {
         mutableStateOf("MY GROUPS")
     }
-    Scaffold(
-        modifier = Modifier
-            .fillMaxWidth(),
-        topBar = {
-            TopAppBar(
-                title = {
-                    Text(
-                        "MY GROUPS",
-                        fontSize = 18.sp,
-                        fontFamily = FontFamily.Monospace,
-                        fontWeight = FontWeight.W900,
-                        textAlign = TextAlign.Center,
-                        modifier = Modifier
-                            .fillMaxWidth()
-                            .onGloballyPositioned {
-                                textWidth.intValue = it.size.width
-                            }
-                            .offset {
-                                IntOffset(
-                                    x = (config.screenWidthDp - textWidth.intValue / 2),
-                                    y = 0
-                                )
-                            }
-                    )
-                },
-                navigationIcon = {
-                    IconButton(
+    ModalNavigationDrawer(
+        drawerState = drawerState,
+        drawerContent = {
+            ModalDrawerSheet(
+                drawerContainerColor = Gray235,
+                drawerContentColor = Blue104,
+                modifier = Modifier
+                    .requiredWidth(300.dp)
+            ) {
+                listOf(
+                    "MY LIST",
+                    "MY GROUPS",
+                    "RESERVED",
+                    "SETTINGS"
+                ).forEach { item ->
+                    NavigationDrawerItem(
+                        label = {
+                            Text(
+                                text = item,
+                                fontSize = 14.sp,
+                                fontFamily = FontFamily.Monospace,
+                            )
+                        },
+                        selected = selectedItem.value == item,
                         onClick = {
                             scope.launch {
-                                if (drawerState.isOpen) {
-                                    drawerState.close()
-                                }
-                                else {
-                                    drawerState.open()
-                                }
+                                drawerState.close()
+                                selectedItem.value = item
+                            }
+                        },
+                        colors = NavigationDrawerItemDefaults.colors(
+                            selectedContainerColor = Blue104,
+                            unselectedContainerColor = Gray235,
+                            selectedTextColor = Gray235,
+                            unselectedTextColor = Gray25
+                        )
+                    )
+                    TextButton(
+                        onClick = {
+                            scope.launch {
+                                drawerState.close()
                             }
                         }
-                    ) {
-                        Icon(
-                            Icons.Filled.Menu,
-                            contentDescription = "menu"
-                        )
-                    }
-                },
-                colors = TopAppBarDefaults.topAppBarColors(
-                    containerColor = Gray235,
-                    titleContentColor = Blue104,
-                    navigationIconContentColor = Gray25
-                )
-            )
-        },
-        floatingActionButton = {
-            FloatingActionButton(
-                onClick = {
-
-                },
-                shape = CircleShape,
-                modifier = Modifier
-                    .padding(20.dp)
-                    .shadow(5.dp, CircleShape),
-                containerColor = White,
-                contentColor = Blue104
-            ) {
-                Icon(
-                    Icons.Filled.Add,
-                    contentDescription = "add item",
-                    modifier = Modifier.size(30.dp)
-                )
+                    ) {}
+                }
             }
         },
-        floatingActionButtonPosition = FabPosition.End,
-        containerColor = Gray235
-    ) { innerPadding ->
-        ModalNavigationDrawer(
-            drawerState = drawerState,
-            drawerContent = {
-                ModalDrawerSheet(
-                    drawerContainerColor = Gray235,
-                    drawerContentColor = Blue104,
-                    modifier = Modifier
-                        .requiredWidth(300.dp)
-                ) {
-                    listOf(
-                        "MY LIST",
-                        "MY GROUPS",
-                        "RESERVED",
-                        "SETTINGS"
-                    ).forEach { item ->
-                        NavigationDrawerItem(
-                            label = {
-                                Text(
-                                    text = item,
-                                    fontSize = 14.sp,
-                                    fontFamily = FontFamily.Monospace,
-                                )
-                            },
-                            selected = selectedItem.value == item,
-                            onClick = {
-                                scope.launch {
-                                    drawerState.close()
-                                    selectedItem.value = item
+    ) {
+        Scaffold(
+            modifier = Modifier
+                .fillMaxWidth(),
+            topBar = {
+                TopAppBar(
+                    title = {
+                        Text(
+                            "MY GROUPS",
+                            fontSize = 18.sp,
+                            fontFamily = FontFamily.Monospace,
+                            fontWeight = FontWeight.W900,
+                            textAlign = TextAlign.Center,
+                            modifier = Modifier
+                                .fillMaxWidth()
+                                .onGloballyPositioned {
+                                    textWidth.intValue = it.size.width
                                 }
-                            },
-                            colors = NavigationDrawerItemDefaults.colors(
-                                selectedContainerColor = Blue104,
-                                unselectedContainerColor = Gray235,
-                                selectedTextColor = Gray235,
-                                unselectedTextColor = Gray25
-                            )
+                                .offset {
+                                    IntOffset(
+                                        x = (config.screenWidthDp - textWidth.intValue / 2),
+                                        y = 0
+                                    )
+                                }
                         )
-                        TextButton(
+                    },
+                    navigationIcon = {
+                        IconButton(
                             onClick = {
                                 scope.launch {
-                                    drawerState.close()
+                                    if (drawerState.isOpen) {
+                                        drawerState.close()
+                                    }
+                                    else {
+                                        drawerState.open()
+                                    }
                                 }
                             }
-                        ) {}
-                    }
+                        ) {
+                            Icon(
+                                Icons.Filled.Menu,
+                                contentDescription = "menu"
+                            )
+                        }
+                    },
+                    colors = TopAppBarDefaults.topAppBarColors(
+                        containerColor = Gray235,
+                        titleContentColor = Blue104,
+                        navigationIconContentColor = Gray25
+                    )
+                )
+            },
+            floatingActionButton = {
+                FloatingActionButton(
+                    onClick = {
+
+                    },
+                    shape = CircleShape,
+                    modifier = Modifier
+                        .padding(20.dp)
+                        .shadow(5.dp, CircleShape),
+                    containerColor = White,
+                    contentColor = Blue104
+                ) {
+                    Icon(
+                        Icons.Filled.Add,
+                        contentDescription = "add item",
+                        modifier = Modifier.size(30.dp)
+                    )
                 }
             },
-        ) {
+            floatingActionButtonPosition = FabPosition.End,
+            containerColor = Gray235
+        ) { innerPadding ->
             Column(
                 verticalArrangement = Arrangement.Top
             ) {
