@@ -125,8 +125,7 @@ fun CustomSwitch(
                 fontFamily = FontFamily.Monospace
             )
             Box(
-                modifier = Modifier
-                    .clipToBounds()
+                modifier = Modifier.clipToBounds()
             ) {
                 Text(
                     text = textOff,
@@ -146,7 +145,6 @@ fun CustomSwitch(
                     color = Gray25,
                     fontFamily = FontFamily.Monospace
                 )
-
             }
         }
     }

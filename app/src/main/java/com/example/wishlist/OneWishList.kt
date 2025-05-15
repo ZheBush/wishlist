@@ -1,10 +1,18 @@
 package com.example.wishlist
 
+import androidx.compose.animation.AnimatedVisibility
+import androidx.compose.animation.EnterTransition
 import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.animation.core.tween
+import androidx.compose.animation.expandVertically
+import androidx.compose.animation.fadeIn
 import androidx.compose.animation.fadeOut
+import androidx.compose.animation.shrinkVertically
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.Row
@@ -16,6 +24,8 @@ import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.itemsIndexed
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.icons.Icons
 import androidx.compose.material.icons.filled.ArrowDropDown
@@ -27,15 +37,19 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.Icon
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.mutableStateListOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clipToBounds
 import androidx.compose.ui.draw.scale
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.focus.focusModifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.text.style.TextOverflow
@@ -70,7 +84,7 @@ val list = Wishlist(
             "CCCCCCCCCCCC"
         ),
 
-    )
+        )
 )
 
 @Composable
@@ -78,12 +92,13 @@ fun OneWishList(list: Wishlist) {
     val isOpen = remember {
         mutableStateOf(false)
     }
-    val startHeight = 80
+    val startHeight = 100
     val endHeight = 400
-    val itemState = remember {
-        mutableIntStateOf(startHeight)
-    }
-    val height by animateDpAsState(targetValue = itemState.intValue.dp, label = "")
+    val height by animateDpAsState(
+        targetValue = if (isOpen.value) endHeight.dp else startHeight.dp,
+        animationSpec = tween(300),
+        label = ""
+    )
     Column(
         modifier = Modifier
             .fillMaxWidth()
@@ -95,7 +110,7 @@ fun OneWishList(list: Wishlist) {
                 start = 8.dp,
                 end = 8.dp
             ),
-        verticalArrangement = if (itemState.intValue == startHeight) {
+        verticalArrangement = if (isOpen.value) {
             Arrangement.Top
         }
         else {
@@ -110,36 +125,60 @@ fun OneWishList(list: Wishlist) {
             overflow = TextOverflow.Ellipsis,
             modifier = Modifier
                 .fillMaxWidth()
-                .background(Gray235, RoundedCornerShape(5.dp))
-                .padding(
-                    top = 10.dp,
-                    start = 10.dp,
-                    bottom = 10.dp
-                )
+                .background(Gray235, RoundedCornerShape(6.dp))
+                .padding(10.dp)
         )
-        Button(
-            onClick = {
-                itemState.intValue =
-                    if (itemState.intValue == startHeight) endHeight else startHeight
-            },
-            colors = ButtonDefaults.buttonColors(
-                containerColor = Blue104,
-                contentColor = Gray235
-            ),
-            contentPadding = PaddingValues(0.dp)
+        AnimatedVisibility(
+            visible = isOpen.value,
+            enter = expandVertically(),
+            exit = shrinkVertically(),
         ) {
-            Icon(
-                if (itemState.intValue == startHeight) {
-                    Icons.Filled.KeyboardArrowDown
+            LazyColumn(
+                modifier = Modifier
+                    .fillMaxWidth()
+                    .height(300.dp)
+                    .padding(top = 6.dp),
+                contentPadding = PaddingValues(top = 10.dp)
+            ) {
+                itemsIndexed(list.list) {_, item ->
+                    OneWish(item = item, list = remember {
+                        mutableStateListOf()
+                    })
                 }
-                else {
-                    Icons.Filled.KeyboardArrowUp
+            }
+        }
+        Row(
+            modifier = Modifier
+                .fillMaxWidth()
+                .height(50.dp),
+            verticalAlignment = Alignment.CenterVertically,
+            horizontalArrangement = Arrangement.Center
+        ) {
+            Button(
+                onClick = {
+                    isOpen.value = !isOpen.value
                 },
-                contentDescription = "arrow down"
-            )
+                colors = ButtonDefaults.buttonColors(
+                    containerColor = Blue104,
+                    contentColor = Gray235
+                ),
+                contentPadding = PaddingValues(0.dp)
+            ) {
+                Icon(
+                    if (!isOpen.value) {
+                        Icons.Filled.KeyboardArrowDown
+                    }
+                    else {
+                        Icons.Filled.KeyboardArrowUp
+                    },
+                    contentDescription = "arrow down"
+                )
+            }
         }
     }
-    Spacer(modifier = Modifier.fillMaxWidth().height(10.dp))
+    Spacer(modifier = Modifier
+        .fillMaxWidth()
+        .height(10.dp))
 }
 
 @Preview(showBackground = false)
