@@ -49,6 +49,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.wishlist.data.Item
+import com.example.wishlist.data.Wishlist
 import com.example.wishlist.itemActions.AddItemWindow
 import com.example.wishlist.ui.theme.Blue104
 import com.example.wishlist.ui.theme.Gray235
@@ -61,8 +62,49 @@ import kotlinx.coroutines.launch
 fun MyWishLists(navController: NavController) {
     val list = remember {
         mutableStateListOf(
-            Item(
-                0, "ABC", "Description"
+            Wishlist(
+                0,
+                "My first list",
+                true,
+                listOf(
+                    Item(
+                        0,
+                        "AAA",
+                        "AAAAAAAAAAA"
+                    ),
+                    Item(
+                        1,
+                        "BBB",
+                        "BBBBBBBBBBB"
+                    ),
+                    Item(
+                        2,
+                        "CCC",
+                        "CCCCCCCCCCCC"
+                    )
+                )
+            ),
+            Wishlist(
+                1,
+                "My second list",
+                true,
+                listOf(
+                    Item(
+                        3,
+                        "DDD",
+                        "DDDDDDDDDDDD"
+                    ),
+                    Item(
+                        4,
+                        "EEE",
+                        "EEEEEEEEEEEEE"
+                    ),
+                    Item(
+                        5,
+                        "FFF",
+                        "FFFFFFFFFFFFFF"
+                    )
+                )
             )
         )
     }
@@ -198,19 +240,11 @@ fun MyWishLists(navController: NavController) {
                     modifier = Modifier
                         .fillMaxSize()
                         .padding(innerPadding),
-                    contentPadding = PaddingValues(
-                        top = 0.dp,
-                        bottom = 15.dp,
-                        start = 15.dp,
-                        end = 15.dp
-                    )
+                    contentPadding = PaddingValues(15.dp)
                 ) {
                     itemsIndexed(list) { _, item ->
-                        OneWish(item = item, list = list)
+                        OneWishList(list = item)
                     }
-                }
-                if (isAddCardWindowOpen.value) {
-                    AddItemWindow(isAddCardWindowOpen, list)
                 }
             }
         }

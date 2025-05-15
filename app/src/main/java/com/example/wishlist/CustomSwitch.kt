@@ -151,9 +151,3 @@ fun CustomSwitch(
         }
     }
 }
-
-@Preview(showBackground = false)
-@Composable
-fun CustomSwitchPreview() {
-    CustomSwitch(onCheckedChange = {})
-}
